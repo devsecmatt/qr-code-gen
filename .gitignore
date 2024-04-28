@@ -1,3 +1,6 @@
 venv-qr-code-gen/
 qr-code-images/
 code-list.csv
+.DS_Store
+alt-list.csv
+qr-code-images.zip
