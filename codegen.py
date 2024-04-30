@@ -1,7 +1,12 @@
 import sys, getopt
 import csv
 import qrcode
+import zipfile
 
+def addToZip(archive='qr-codes.zip', file2add=None):
+    #doing all of these open and close file ops is probably not the best way to do this
+    with zipfile.ZipFile(archive, 'w') as myzip:
+        myzip.write(file2add)
 
 def readAndPrintFile(inputFileName, outputFilename):
     with open(inputFileName) as csvFile:
