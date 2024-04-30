@@ -2,13 +2,16 @@ import sys, getopt
 import csv
 import qrcode
 import zipfile
+import os
 
 def addToZip(archive='qr-codes.zip', file2add=None):
-    #doing all of these open and close file ops is probably not the best way to do this
-    with zipfile.ZipFile(archive, 'w') as myzip:
-        myzip.write(file2add)
+    filePath = 'qr-code-images'
+    directoryContents = os.listdir(filePath)
+    for imageFile in directoryContents:
+        with zipfile.ZipFile(archive, 'w') as myzip:
+            myzip.write(filePath + "/" + imageFile)
 
-def readAndPrintFile(inputFileName, outputFilename):
+def readAndPrintFile(inputFileName):
     with open(inputFileName) as csvFile:
         qrReader = csv.reader(csvFile, delimiter=",")
         for row in qrReader:
@@ -37,7 +40,8 @@ def main(argv):
             inputFilename = arg
         elif opt in ('-o', "--ofile"):
             outputFilename = arg
-    thisQRpair = readAndPrintFile(inputFileName, outputFilename)
+    thisQRpair = readAndPrintFile(inputFileName)
+    compressedQRcodes = addToZip(archive=outputFilename)
 
 if __name__ == '__main__':
     main((sys.argv[1:]))
