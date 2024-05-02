@@ -3,6 +3,22 @@ import csv
 import qrcode
 import zipfile
 import os
+from qreader import QReader
+import cv2
+
+def qrCodeVerify(filepath):
+    if(filepath):
+        filePath=filepath
+    else:
+        filePath=('qr-code-images')
+    directoryContents = os.listdir(filePath)
+    for image in directoryContents:
+        qreader = QReader()
+        # Get the image that contains the QR code
+        image = cv2.cvtColor(cv2.imread(filePath+ "/" +image), cv2.COLOR_BGR2RGB)
+        # Use the detect_and_decode function to get the decoded QR data
+        decoded_text = qreader.detect_and_decode(image=image)
+        print(decoded_text)
 
 def addToZip(archive='qr-codes.zip', file2add=None):
     filePath = 'qr-code-images'
@@ -42,6 +58,8 @@ def main(argv):
             outputFilename = arg
     thisQRpair = readAndPrintFile(inputFileName)
     compressedQRcodes = addToZip(archive=outputFilename)
+    qrCodeVerify(filepath='qr-code-images')
+
 
 if __name__ == '__main__':
     main((sys.argv[1:]))
